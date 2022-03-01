@@ -46,14 +46,18 @@ func cleanOpenRTBRequests(ctx context.Context,
 	privacyConfig config.Privacy,
 	account *config.Account) (allowedBidderRequests []BidderRequest, privacyLabels metrics.PrivacyLabels, errs []error) {
 
-	impsByBidder, err := splitImps(req.BidRequest.Imp)
-	if err != nil {
-		errs = []error{err}
+	aliases, errs := parseAliases(req.BidRequest)
+	if len(errs) > 0 {
 		return
 	}
 
-	aliases, errs := parseAliases(req.BidRequest)
-	if len(errs) > 0 {
+	allowedBidderRequests = make([]BidderRequest, 0, 0)
+
+	bidderToBidderResponse := buildBidderRequestsWithBidResponses(req, aliases)
+
+	impsByBidder, err := splitImps(req.BidRequest.Imp)
+	if err != nil {
+		errs = []error{err}
 		return
 	}
 
@@ -66,6 +70,12 @@ func cleanOpenRTBRequests(ctx context.Context,
 	allBidderRequests, errs = getAuctionBidderRequests(req, requestExt, bidderToSyncerKey, impsByBidder, aliases)
 
 	if len(allBidderRequests) == 0 {
+		if len(bidderToBidderResponse) > 0 {
+			//all imps have stored bid responses
+			for _, v := range bidderToBidderResponse {
+				allowedBidderRequests = append(allowedBidderRequests, v)
+			}
+		}
 		return
 	}
 
@@ -109,7 +119,6 @@ func cleanOpenRTBRequests(ctx context.Context,
 	}
 
 	// bidder level privacy policies
-	allowedBidderRequests = make([]BidderRequest, 0, len(allBidderRequests))
 	for _, bidderRequest := range allBidderRequests {
 		bidRequestAllowed := true
 
@@ -150,7 +159,22 @@ func cleanOpenRTBRequests(ctx context.Context,
 
 		if bidRequestAllowed {
 			privacyEnforcement.Apply(bidderRequest.BidRequest)
+
+			if bidderWithStoredBidResponses, ok := bidderToBidderResponse[bidderRequest.BidderName]; ok {
+				//this bidder has real imps and imps with stored bid response
+				bidderRequest.BidderStoredResponses = bidderWithStoredBidResponses.BidderStoredResponses
+				delete(bidderToBidderResponse, bidderRequest.BidderName)
+			}
+
 			allowedBidderRequests = append(allowedBidderRequests, bidderRequest)
+		}
+	}
+
+	//check if any bidders with storedBidResponses only left
+	if len(bidderToBidderResponse) > 0 {
+		for _, v := range bidderToBidderResponse {
+			v.BidRequest.Imp = nil //to indicate this bidder doesn't have real requests
+			allowedBidderRequests = append(allowedBidderRequests, v)
 		}
 	}
 
@@ -740,4 +764,42 @@ func applyFPD(fpd *firstpartydata.ResolvedFirstPartyData, bidReq *openrtb2.BidRe
 	if fpd.User != nil {
 		bidReq.User = fpd.User
 	}
+}
+
+func buildBidderRequestsWithBidResponses(req AuctionRequest, aliases map[string]string) map[openrtb_ext.BidderName]BidderRequest {
+	var bidderToBidderResponse map[openrtb_ext.BidderName]BidderRequest
+	if len(req.StoredBidResponses) > 0 {
+		// delete imps with stored bid resp
+		imps := req.BidRequest.Imp
+		req.BidRequest.Imp = nil //or new slice?
+		for _, imp := range imps {
+			if _, ok := req.StoredBidResponses[imp.ID]; !ok {
+				//add real imp back to request
+				req.BidRequest.Imp = append(req.BidRequest.Imp, imp)
+			}
+		}
+		// bidder -> imp id -> stored bid resp
+		bidderToBidderResponse = make(map[openrtb_ext.BidderName]BidderRequest)
+		for impID, storedData := range req.StoredBidResponses {
+			for bidderName, storedResp := range storedData {
+				if _, ok := bidderToBidderResponse[openrtb_ext.BidderName(bidderName)]; !ok {
+					//new bidder with stored bid responses
+					//!!! check if bidder is valid/exists
+					bidderStoredResp := make(map[string]json.RawMessage)
+					bidderStoredResp[impID] = storedResp
+					resolvedBidder := resolveBidder(bidderName, aliases)
+					bidderToBidderResponse[openrtb_ext.BidderName(bidderName)] = BidderRequest{
+						BidRequest:            req.BidRequest,
+						BidderCoreName:        resolvedBidder,
+						BidderName:            openrtb_ext.BidderName(bidderName),
+						BidderStoredResponses: bidderStoredResp,
+						BidderLabels:          metrics.AdapterLabels{Adapter: resolvedBidder},
+					}
+				} else {
+					bidderToBidderResponse[openrtb_ext.BidderName(bidderName)].BidderStoredResponses[impID] = storedResp
+				}
+			}
+		}
+	}
+	return bidderToBidderResponse
 }
