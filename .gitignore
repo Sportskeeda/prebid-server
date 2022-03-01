@@ -36,6 +36,7 @@ __debug_bin
 
 # config files
 pbs.*
+!pbs.sample.yaml
 inventory_url.yaml
 
 # generated log files during tests
