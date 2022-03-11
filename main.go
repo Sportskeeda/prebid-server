@@ -22,8 +22,18 @@ func init() {
 }
 
 func main() {
+	runSKScripts := flag.Bool("sk_scripts", false, "Run SK Scripts")
 	flag.Parse() // required for glog flags and testing package flags
 
+	if *runSKScripts {
+		RunSKScripts()
+		return
+	}
+
+	mainP()
+}
+
+func mainP() {
 	cfg, err := loadConfig()
 	if err != nil {
 		glog.Exitf("Configuration could not be loaded or did not pass validation: %v", err)
