@@ -10,19 +10,12 @@
       [320, 320]
     ],
     "bidders": {
-      "openx": {
-        "delDomain": "sportskeeda-d.openx.net",
-        "unit": "551030812"
-      },
       "pubmatic": {
         "publisherId": "156349",
         "adSlot": "AMP_Mob_300250_2@300x250"
       },
       "ix": {
         "siteId": "791142"
-      },
-      "nextmillennium": {
-        "placement_id": "10595"
       }
     }
   },
@@ -37,19 +30,12 @@
       [320, 320]
     ],
     "bidders": {
-      "openx": {
-        "delDomain": "sportskeeda-d.openx.net",
-        "unit": "551030812"
-      },
       "pubmatic": {
         "publisherId": "156349",
         "adSlot": "AMP_Mob_300250_3@300x250"
       },
       "ix": {
         "siteId": "791142"
-      },
-      "nextmillennium": {
-        "placement_id": "10595"
       }
     }
   },
@@ -64,19 +50,12 @@
       [320, 320]
     ],
     "bidders": {
-      "openx": {
-        "delDomain": "sportskeeda-d.openx.net",
-        "unit": "551030812"
-      },
       "pubmatic": {
         "publisherId": "156349",
         "adSlot": "AMP_Mob_300250_4@300x250"
       },
       "ix": {
         "siteId": "791142"
-      },
-      "nextmillennium": {
-        "placement_id": "10595"
       }
     }
   },
@@ -91,19 +70,12 @@
       [320, 320]
     ],
     "bidders": {
-      "openx": {
-        "delDomain": "sportskeeda-d.openx.net",
-        "unit": "551030812"
-      },
       "pubmatic": {
         "publisherId": "156349",
         "adSlot": "AMP_Mob_300250_5@300x250"
       },
       "ix": {
         "siteId": "791142"
-      },
-      "nextmillennium": {
-        "placement_id": "10595"
       }
     }
   },
@@ -118,19 +90,12 @@
       [320, 320]
     ],
     "bidders": {
-      "openx": {
-        "delDomain": "sportskeeda-d.openx.net",
-        "unit": "551030812"
-      },
       "pubmatic": {
         "publisherId": "156349",
         "adSlot": "AMP_Mob_300250_6@300x250"
       },
       "ix": {
         "siteId": "791142"
-      },
-      "nextmillennium": {
-        "placement_id": "10595"
       }
     }
   },
@@ -144,19 +109,12 @@
       [336, 280]
     ],
     "bidders": {
-      "openx": {
-        "delDomain": "sportskeeda-d.openx.net",
-        "unit": "551030812"
-      },
       "pubmatic": {
         "publisherId": "156349",
         "adSlot": "AMP_Mob_300250_8@300x250"
       },
       "ix": {
         "siteId": "791142"
-      },
-      "nextmillennium": {
-        "placement_id": "10595"
       }
     }
   },
@@ -170,19 +128,12 @@
       [336, 280]
     ],
     "bidders": {
-      "openx": {
-        "delDomain": "sportskeeda-d.openx.net",
-        "unit": "551030812"
-      },
       "pubmatic": {
         "publisherId": "156349",
         "adSlot": "AMP_Mob_300250_9@300x250"
       },
       "ix": {
         "siteId": "791142"
-      },
-      "nextmillennium": {
-        "placement_id": "10595"
       }
     }
   },
@@ -196,19 +147,12 @@
       [336, 280]
     ],
     "bidders": {
-      "openx": {
-        "delDomain": "sportskeeda-d.openx.net",
-        "unit": "551030812"
-      },
       "pubmatic": {
         "publisherId": "156349",
         "adSlot": "AMP_Mob_300250_10@300x250"
       },
       "ix": {
         "siteId": "791142"
-      },
-      "nextmillennium": {
-        "placement_id": "10595"
       }
     }
   },
@@ -222,19 +166,12 @@
       [336, 280]
     ],
     "bidders": {
-      "openx": {
-        "delDomain": "sportskeeda-d.openx.net",
-        "unit": "551030812"
-      },
       "pubmatic": {
         "publisherId": "156349",
         "adSlot": "AMP_Mob_300250_11@300x250"
       },
       "ix": {
         "siteId": "791142"
-      },
-      "nextmillennium": {
-        "placement_id": "10595"
       }
     }
   }
