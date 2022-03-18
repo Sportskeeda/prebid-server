@@ -12,3 +12,13 @@ stored_requests:
 cache:
   host: localhost:2424/
   scheme: http
+
+external_url: https://prebid.staging.sportskeeda.com
+
+adapters:
+  pubmatic:
+    disabled: false
+    endpoint: https://hbopenbid.pubmatic.com/translator?source=prebid-server
+  ix:
+    disabled: false
+    endpoint: http://sg-ent.lb.indexww.com/openrtb?p=198422
