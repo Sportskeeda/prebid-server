@@ -239,6 +239,10 @@ func (e *exchange) HoldAuction(ctx context.Context, r AuctionRequest, debugLog *
 	// Make our best guess if GDPR applies
 	gdprDefaultValue := e.parseGDPRDefaultValue(r.BidRequestWrapper.BidRequest)
 
+	// This is a temp hack to avoid runtime panic happening after 9dc2d5fb36215197e01bb3e12227dd0f09eb5b7c
+	r.TCF2ConfigBuilder = gdpr.NewTCF2Config
+	r.GDPRPermissionsBuilder = gdpr.NewPermissions
+
 	// Slice of BidRequests, each a copy of the original cleaned to only contain bidder data for the named bidder
 	tcf2Cfg := r.TCF2ConfigBuilder(e.privacyConfig.GDPR.TCF2, r.Account.GDPR)
 	gdprPerms := r.GDPRPermissionsBuilder(e.privacyConfig.GDPR, tcf2Cfg, e.gvlVendorIDs, e.vendorListFetcher)
