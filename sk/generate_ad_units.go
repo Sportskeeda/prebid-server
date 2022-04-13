@@ -36,27 +36,6 @@ func generateStoredRequestsFromJsonFile(jsonFilePath string) {
 
 		id := fmt.Sprintf("id-----%s", adUnit.Label)
 
-		extRequest := openrtb_ext.RequestExt{}
-
-		extRequest.SetPrebid(&openrtb_ext.ExtRequestPrebid{
-			CurrencyConversions: &openrtb_ext.ExtRequestCurrency{
-				ConversionRates: map[string]map[string]float64{
-					"USD": {
-						"INR": 75,
-					},
-				},
-			},
-			Targeting: &openrtb_ext.ExtRequestTargeting{
-				PriceGranularity: openrtb_ext.PriceGranularity{
-					Precision: 2,
-					Ranges: []openrtb_ext.GranularityRange{
-						{Min: 1, Max: 900, Increment: 1},
-						{Min: 905, Max: 3150, Increment: 5},
-					},
-				},
-			},
-		})
-
 		impId := fmt.Sprintf("request--%s", adUnit.Label)
 
 		impBannerSizes := make([]openrtb2.Format, 0)
@@ -85,7 +64,27 @@ func generateStoredRequestsFromJsonFile(jsonFilePath string) {
 			Currencies: []string{
 				"USD",
 			},
-			Ext: extRequest,
+			Ext: StoredRequestExt{
+				Prebid: &openrtb_ext.ExtRequestPrebid{
+					CurrencyConversions: &openrtb_ext.ExtRequestCurrency{
+						ConversionRates: map[string]map[string]float64{
+							"USD": {
+								"INR": 75,
+							},
+						},
+					},
+					Targeting: &openrtb_ext.ExtRequestTargeting{
+						IncludeFormat: true,
+						PriceGranularity: openrtb_ext.PriceGranularity{
+							Precision: 2,
+							Ranges: []openrtb_ext.GranularityRange{
+								{Min: 1, Max: 900, Increment: 1},
+								{Min: 905, Max: 3150, Increment: 5},
+							},
+						},
+					},
+				},
+			},
 			Imp: []openrtb2.Imp{
 				impRequest,
 			},

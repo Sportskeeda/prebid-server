@@ -5,16 +5,21 @@ import (
 	"github.com/prebid/prebid-server/openrtb_ext"
 )
 
+type StoredRequestExt struct {
+	openrtb_ext.RequestExt
+	Prebid *openrtb_ext.ExtRequestPrebid `json:"prebid"`
+}
+
 type StoredRequestSite struct {
 	Page string `json:"page"`
 }
 
 type StoredRequest struct {
-	ID         string                 `json:"id"`
-	Site       StoredRequestSite      `json:"site"`
-	Currencies []string               `json:"cur"`
-	Ext        openrtb_ext.RequestExt `json:"ext"`
-	Imp        []openrtb2.Imp         `json:"imp"`
+	ID         string            `json:"id"`
+	Site       StoredRequestSite `json:"site"`
+	Currencies []string          `json:"cur"`
+	Ext        StoredRequestExt  `json:"ext"`
+	Imp        []openrtb2.Imp    `json:"imp"`
 }
 
 type SKAdUnit struct {
