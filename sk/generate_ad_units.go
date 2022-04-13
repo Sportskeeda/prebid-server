@@ -75,6 +75,8 @@ func generateStoredRequestsFromJsonFile(jsonFilePath string) {
 					},
 					Targeting: &openrtb_ext.ExtRequestTargeting{
 						IncludeFormat: true,
+						IncludeWinners: true,
+						IncludeBidderKeys: true,
 						PriceGranularity: openrtb_ext.PriceGranularity{
 							Precision: 2,
 							Ranges: []openrtb_ext.GranularityRange{
